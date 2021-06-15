@@ -6,7 +6,8 @@
 *                                                                      *
 ************************************************************************
 """
+from ProxyListClient import ProxyListClient
 
-from ProxyListClient import ProxyListClient as client
+proxy_list = ProxyListClient()
 
 # end-of-file

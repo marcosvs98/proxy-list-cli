@@ -73,13 +73,13 @@ class ProxyListClient():
 		self._tolerance = tolerance
 		self._initialize()
 
-	def get_proxies(self, proxy_path=None):
+	def get_proxies(self, proxy_path=None, limit=-1):
 		with open(self._outfile, 'r') as f:
 			proxies = json.load(f)
 			if proxy_path:
 				try:
 					p, s = tuple(proxy_path.split('.'))
-					return proxies[p][s]
+					return [ProxyParsed(**p) for p in proxies[p][s][0 : limit]]
 				except (KeyError, ValueError):
 					raise Exception("this filter is not available")
 			return proxies['raw']
@@ -116,8 +116,11 @@ class ProxyListClient():
 				pass
 
 	def _initialize(self):
-		if self._updated_proxies():
-			return
+		try:
+			if self._updated_proxies():
+				return
+		except FileNotFoundError:
+			pass
 		self._get_proxy_list_status()
 		response = urlopen(PUBLIC_PROXIES_LIST)
 		content_text = response.read().decode('utf-8')
