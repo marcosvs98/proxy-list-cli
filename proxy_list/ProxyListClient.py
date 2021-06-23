@@ -6,9 +6,12 @@
 *                                                                      *
 ************************************************************************
 """
+import abc
 import time
 import json
 import logging
+import threading
+from types import SimpleNamespace
 from datetime import datetime, timedelta
 from urllib.request import urlopen
 from dataclasses import dataclass , field
@@ -71,7 +74,23 @@ class ProxyListClient():
 		self._proxies = proxies
 		self._outfile = outfile
 		self._tolerance = tolerance
-		self._initialize()
+		self._running = False
+		self._update_proxies()
+		self._info = self.get_proxy_info
+
+	def _initialize(self):
+		self._update_proxies()
+		self._nthreads = round(self._info.num_proxies / 2)
+		self._threads = [None] * self._nthreads
+		self._running = False
+
+		if not self._running:
+			self._running = True
+			for i in range(self._nthreads):
+				self._threads[i] = threading.Thread(target=self._thread_handler)
+				self._threads[i].daemon = True
+				self._threads[i].start()
+				self._nthreads = 0
 
 	def get_proxies(self, proxy_path=None, limit=-1):
 		with open(self._outfile, 'r') as f:
@@ -83,6 +102,14 @@ class ProxyListClient():
 				except (KeyError, ValueError):
 					raise Exception("this filter is not available")
 			return proxies['raw']
+
+	def _thread_handler(self):
+		try:
+			self.before_handler()
+			self._update_proxies()
+			self.after_handler()
+		except:
+			pass
 
 	def _get_proxy_list_status(self):
 		response = urlopen(PUBLIC_PROXIES_STATUS)
@@ -115,7 +142,7 @@ class ProxyListClient():
 			except (KeyError, AttributeError) as e:
 				pass
 
-	def _initialize(self):
+	def _update_proxies(self):
 		try:
 			if self._updated_proxies():
 				return
@@ -154,7 +181,7 @@ class ProxyListClient():
 		# parsing headers info
 		self._proxies_result['info']['header'] = [line for line in proxies_header.split('\n')]
 		self._proxies_result['info']['updated'] = str(datetime.now())
-		self._proxies_result['info']['count_proxies'] = len(proxies_list)
+		self._proxies_result['info']['num_proxies'] = len(proxies_list)
 		# statistics
 		self._proxies_result['info']['success'] = len(self._proxies_result['status']['success'])
 		self._proxies_result['info']['failure'] = len(self._proxies_result['status']['failure'])
@@ -168,6 +195,15 @@ class ProxyListClient():
 			json.dump(self._proxies_result, f, indent=4)
 		log.warning(f"success-rate={self._proxies_result['info']['success-rate']} "
 					f"failure-rate={self._proxies_result['info']['failure-rate']} ")
+
+	@property
+	def get_proxy_info(self):
+		with open(self._outfile, 'r') as f:
+			try:
+				cache = json.load(f)
+				return SimpleNamespace(**cache['info'])
+			except (KeyError, AttributeError) as e:
+				raise Exception("Unable to get information from the proxy list")
 
 	def _parse(self, proxy_line):
 		"""
@@ -245,5 +281,28 @@ class ProxyListClient():
 		if proxy_type.startswith('S'):
 			return 'https'
 		return 'http'
+
+	def before_handler(self, **kwargs):
+		log.debug("Initializing flow processing...")
+
+	def after_handler(self, **kwargs):
+		log.debug("Flow processing performed!")
+
+	def __enter__(self):
+		self._initialize()
+		return self
+
+	def __exit__(self, exc_type, exc_val, exc_tb):
+		if exc_val:
+			log.warning(f'exc_type: {exc_type}')
+			log.warning(f'exc_value: {exc_val}')
+			log.warning(f'exc_traceback: {exc_tb}')
+		self.shutdown()
+
+	def __repr__(self):
+		return (f'ProxyListClient ['
+				f'success={self._info.success} '
+				f'failure={self._info.failure}]')
+
 
 # end-of-file
