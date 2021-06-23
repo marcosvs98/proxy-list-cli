@@ -196,15 +196,6 @@ class ProxyListClient():
 		log.warning(f"success-rate={self._proxies_result['info']['success-rate']} "
 					f"failure-rate={self._proxies_result['info']['failure-rate']} ")
 
-	@property
-	def get_proxy_info(self):
-		with open(self._outfile, 'r') as f:
-			try:
-				cache = json.load(f)
-				return SimpleNamespace(**cache['info'])
-			except (KeyError, AttributeError) as e:
-				raise Exception("Unable to get information from the proxy list")
-
 	def _parse(self, proxy_line):
 		"""
 		IP [1]
@@ -250,6 +241,15 @@ class ProxyListClient():
 			return proxy_parsed
 		except IndexError as e:
 			raise InvalidProxyToParser(e)
+
+	@property
+	def get_proxy_info(self):
+		with open(self._outfile, 'r') as f:
+			try:
+				cache = json.load(f)
+				return SimpleNamespace(**cache['info'])
+			except (KeyError, AttributeError) as e:
+				raise Exception("Unable to get information from the proxy list")
 
 	def _parse_anonymity(self, proxy_info):
 		if proxy_info.startswith('N'):
@@ -301,8 +301,7 @@ class ProxyListClient():
 
 	def __repr__(self):
 		return (f'ProxyListClient ['
-				f'success={self._info.success} '
-				f'failure={self._info.failure}]')
-
+		        f'success={self._info.success} '
+		        f'failure={self._info.failure}]')
 
 # end-of-file
