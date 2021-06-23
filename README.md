@@ -13,8 +13,7 @@ Responsible for implementing, filtering and manipulating public proxy lists obta
 >>>
 >>> client.get_proxy_info.num_proxies
 400
->>>
-```
+>>>```
 
 
 #### Proxy List Cache
