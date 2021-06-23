@@ -282,6 +282,7 @@ class ProxyListClient():
 			return 'https'
 		return 'http'
 
+
 	def before_handler(self, **kwargs):
 		log.debug("Initializing flow processing...")
 
@@ -297,7 +298,6 @@ class ProxyListClient():
 			log.warning(f'exc_type: {exc_type}')
 			log.warning(f'exc_value: {exc_val}')
 			log.warning(f'exc_traceback: {exc_tb}')
-		self.shutdown()
 
 	def __repr__(self):
 		return (f'ProxyListClient ['
