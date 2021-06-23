@@ -1,7 +1,7 @@
 # proxy-list-pycli
 Responsible for implementing, filtering and manipulating public proxy lists obtained from 'https://github.com/clarketm/proxy-list'
 
-#### Usage
+### Usage
 Usage is simple...
 
 ```pycon
@@ -16,7 +16,7 @@ Usage is simple...
 >>>
 ```
 
-##### Example Proxy List Cache
+#### Example Proxy List Cache
 ```
 {
     "info": {
