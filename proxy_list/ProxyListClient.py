@@ -29,7 +29,7 @@ class InvalidProxyToParser(Exception):
 	pass
 
 
-@dataclass
+@dataclass(repr=True)
 class ProxyParsed():
 	proxy_host                 : str
 	proxy_port                 : int
@@ -42,7 +42,9 @@ class ProxyParsed():
 	proxy_user                 : str = field(default=None)
 	proxy_pass                 : str = field(default=None)
 	proxy_status               : str = field(default="no-status-available")
-
+	
+	def __repr__(self):
+		return f'ProxyParsed(uri={self.proxy_uri})'
 
 
 class ProxyListClient():

@@ -54,10 +54,6 @@ class ProxyListClientTester(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    #unittest.main()
-	client = ProxyListClient()
-	print(client.get_proxy_info.num_proxies)
+    unittest.main()
 
 # end-of-file
-
-
