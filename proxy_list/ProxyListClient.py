@@ -188,13 +188,13 @@ class ProxyListClient():
 		self._proxies_result['info']['no-status-available'] = len(self._proxies_result['status']['no-status-available'])
 		success_rate = round(100 * (sum(1 for s in self._proxies_status.values()
 			if s=='success'))/ len(self._proxies_status), 2)
-		self._proxies_result['info']['success-rate'] = f"{success_rate}%"
-		self._proxies_result['info']['failure-rate'] = f"{100.00 - success_rate}%"
+		self._proxies_result['info']['success_rate'] = f"{success_rate}%"
+		self._proxies_result['info']['failure_rate'] = f"{100.00 - success_rate}%"
 		# Prepare a json file for cache
 		with open(self._outfile, 'w') as f:
 			json.dump(self._proxies_result, f, indent=4)
-		log.warning(f"success-rate={self._proxies_result['info']['success-rate']} "
-					f"failure-rate={self._proxies_result['info']['failure-rate']} ")
+		log.warning(f"success_rate={self._proxies_result['info']['success_rate']} "
+					f"failure_rate={self._proxies_result['info']['failure_rate']} ")
 
 	def _parse(self, proxy_line):
 		"""

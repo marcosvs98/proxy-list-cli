@@ -10,13 +10,13 @@
             "LTC LMrLZNWGYK3kMHvyioBqZdXYWE3pKj7xZX",
             "IP address:Port CountryCode-Anonymity(Noa/Anm/Hia)-SSL_support(S)-Google_passed(+)"
         ],
-        "updated": "2021-06-22 22:29:36.179899",
+        "updated": "2021-06-22 23:23:36.606502",
         "num_proxies": 400,
         "success": 31,
         "failure": 21,
         "no-status-available": 348,
-        "success-rate": "61.75%",
-        "failure-rate": "38.25%"
+        "success_rate": "61.75%",
+        "failure_rate": "38.25%"
     },
     "status": {
         "no-status-available": [
