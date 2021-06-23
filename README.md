@@ -2,18 +2,18 @@
 Responsible for implementing, filtering and manipulating public proxy lists obtained from 'https://github.com/clarketm/proxy-list'
 
 
-```python
+### ProxyListCliente
+
+```pycon
 >>> from proxy_list import ProxyListClient
 >>>
 >>> client = ProxyListClient()
 >>> client.client.get_proxies('scheme.https')[0:1]
 [ProxyParsed(proxy_host='38.21.36.136', proxy_port='8080', proxy_scheme='https', proxy_level_anonymity=0, proxy_country='US', proxy_google_passed=False, proxy_outgoing_ip=False, proxy_uri='https://38.21.36.136:8080/', proxy_user=None, proxy_pass=None, proxy_status='no-status-available')]
 >>>
->>> client.get_proxy_info.success_rate
-87%
->>>
 >>> client.get_proxy_info.num_proxies
 400
+>>>
 ```
 
 
