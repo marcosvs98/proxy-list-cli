@@ -282,7 +282,6 @@ class ProxyListClient():
 			return 'https'
 		return 'http'
 
-
 	def before_handler(self, **kwargs):
 		log.debug("Initializing flow processing...")
 
