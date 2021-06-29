@@ -16,7 +16,7 @@ Usage is simple...
 >>>
 ```
 
-#### Example Proxy List Cache
+#### Proxy List Cache
 ```
 {
     "info": {
